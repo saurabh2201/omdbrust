@@ -37,10 +37,11 @@ async fn main() -> std::io::Result<()> {
         let service_container = ServiceContainer::new(service::UserService::new(user_collection.clone()));
         App::new()
         .app_data( AppState {service_container})
-        .route("/getmoviedetails", web::get().to(controller::controller(app_data, movie_name)))})
-        .bind("127.0.0.0:3000")?
-        .run()
-        .await
+        .route("/getmovies",web::get().to(controller::find(app_data, movie_name)))
+    })
+    .bind("127.0.0.0:3000")?
+    .run()
+    .await
     
-}   
+    }   
 

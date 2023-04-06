@@ -4,7 +4,6 @@ use bson::{Document, oid::ObjectId};
 use crate::structure::Movie;
 
 
-
 ///Declaring struct Userservice which represents bson document.
 #[derive(Clone)]
 pub struct UserService {
