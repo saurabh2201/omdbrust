@@ -1,7 +1,6 @@
 use actix_web::{web, HttpResponse, Responder, Error};
 use serde::{Deserialize, Serialize};
 use crate::structure::Movie;
-use crate::service::{UserService};
 
 
 async fn get_movie(name: String) -> Result<Movie, Error> {
@@ -29,10 +28,10 @@ pub async fn find(app_data: web::Data<crate::AppState>, movie_name: web::Form<So
 }
 
 pub async fn insert(app_data: web::Data<crate::AppState>, movie_name: web::Form<Someform>) -> impl Responder {
-    let data = get_movie(movie_name.name.to_string()).await;
-    let result = web::block(move || app_data.service_container.user.insert_doc(&data.unwrap())).await.unwrap();
+    let data = get_movie(movie_name.name.to_string()).await.unwrap();
+    let result = web::block(move || app_data.service_container.user.insert_doc(&data)).await.unwrap();
     match result {
-        Ok(result) => HttpResponse::Ok().json(result.unwrap()),
+        Ok(result) => HttpResponse::Ok().json(result.inserted_id.as_object_id().unwrap()),
         Err(e) => {
             println!("Error while getting , {:?}", e);
             HttpResponse::InternalServerError().finish()
