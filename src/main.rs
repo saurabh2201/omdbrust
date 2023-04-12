@@ -1,29 +1,25 @@
 use actix_web::{web, App, HttpServer};
 use std::env;
+mod controller;
 mod service;
 mod structure;
-mod controller;
 
-/// struct ServiceContainer having field "user" which is instance of a function 
-/// "userService" from mod service 
+/// struct ServiceContainer having field "user" which is instance of a function
+/// "userService" from mod service
 pub struct ServiceContainer {
-    user: service::UserService
+    user: service::UserService,
 }
 
 /// Implementation of ServiceContainer
 impl ServiceContainer {
     pub fn new(user: service::UserService) -> Self {
-        ServiceContainer {
-             user 
-            }
+        ServiceContainer { user }
     }
 }
 
 pub struct AppState {
-    service_container: ServiceContainer
+    service_container: ServiceContainer,
 }
-
-
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -32,16 +28,14 @@ async fn main() -> std::io::Result<()> {
     let db = client.database("Moviedata");
     let user_collection = db.collection("Moviecollection");
 
-
     HttpServer::new(move || {
-        let service_container = ServiceContainer::new(service::UserService::new(user_collection.clone()));
+        let service_container =
+            ServiceContainer::new(service::UserService::new(user_collection.clone()));
         App::new()
-        .app_data( AppState {service_container})
-        .route("/getmovies",web::get().to(controller::find(app_data, movie_name)))
+            .app_data(AppState { service_container })
+            .route("/getmovies", web::get().to(controller::find))
     })
     .bind("127.0.0.0:3000")?
     .run()
     .await
-    
-    }   
-
+}

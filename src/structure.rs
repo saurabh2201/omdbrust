@@ -27,4 +27,3 @@ pub struct Movie {
     pub Type: Option<String>,
     pub Response: Option<String>,
 }
-
