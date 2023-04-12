@@ -1,6 +1,6 @@
+/// Importing all necessary modules
 use crate::structure::Movie;
 use bson::{oid::ObjectId, Document};
-/// Importing all necessary modules
 use mongodb::{error::Error, results::InsertOneResult, sync::Collection};
 
 ///Declaring struct Userservice which represents bson document.
