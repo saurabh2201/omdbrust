@@ -1,4 +1,4 @@
-use actix_web::{web, App, HttpServer};
+use actix_web::{web, App, HttpServer, web::Data};
 use std::env;
 mod controller;
 mod service;
@@ -23,19 +23,21 @@ pub struct AppState {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let mongo_url = env::var("MONGO_URL").expect("Mongo URL not connected");
+    let mongo_url = env::var("MONGO_URI").expect("Mongo URL not connected");
     let client = mongodb::sync::Client::with_uri_str(mongo_url).unwrap();
-    let db = client.database("Moviedata");
-    let user_collection = db.collection("Moviecollection");
+    let db = client.database("MovieData");
+    let user_collection = db.collection("MovieCollection");
 
     HttpServer::new(move || {
         let service_container =
             ServiceContainer::new(service::UserService::new(user_collection.clone()));
+        let app = AppState { service_container };
         App::new()
-            .app_data(AppState { service_container })
+            .app_data(Data::new(app).clone())
             .route("/getmovies", web::get().to(controller::find))
+            .route("/insertmovies", web::get().to(controller::insert))
     })
-    .bind("127.0.0.0:3000")?
+    .bind("127.0.0.1:3030")?
     .run()
     .await
 }

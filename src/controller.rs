@@ -40,11 +40,16 @@ pub async fn insert(
     movie_name: web::Form<Someform>,
 ) -> impl Responder {
     let data = get_movie(movie_name.name.to_string()).await.unwrap();
-    let result = web::block(move || app_data.service_container.user.insert_doc(&data))
+    let result = web::block(move || {
+        app_data
+            .service_container
+            .user
+            .insert_doc(&data)
+    })
         .await
         .unwrap();
     match result {
-        Ok(result) => HttpResponse::Ok().json(result.inserted_id.as_object_id().unwrap()),
+        Ok(result) => HttpResponse::Ok().json(result),
         Err(e) => {
             println!("Error while getting , {:?}", e);
             HttpResponse::InternalServerError().finish()

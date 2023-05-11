@@ -1,7 +1,6 @@
 /// Importing all necessary modules
 use crate::structure::Movie;
-use bson::{oid::ObjectId, Document};
-use mongodb::{error::Error, results::InsertOneResult, sync::Collection};
+use mongodb::{error::Error, sync::Collection, bson::{oid::ObjectId, Document}};
 
 ///Declaring struct Userservice which represents bson document.
 #[derive(Clone)]
@@ -17,8 +16,8 @@ impl UserService {
     }
     /// Inserting a document of movie in MongoDB and returning the
     /// result of InsertOneResult which contains inserted id of the document.
-    pub fn insert_doc(&self, movie_name: &Movie) -> Result<InsertOneResult, Error> {
-        self.collection.insert_one(
+    pub fn insert_doc(&self, movie_name: &Movie) -> Result<ObjectId, Error> {
+        let insertion = self.collection.insert_one(
             bson::doc! {
                     "title" : movie_name.Title.as_ref(),
                     "year" : movie_name.Year.as_ref(),
@@ -39,16 +38,20 @@ impl UserService {
                     "imdbID" : movie_name.ImdbID.as_ref(),
                     "type" : movie_name.Type.as_ref(),
                     "response" : movie_name.Response.as_ref()
-
             },
             None,
-        )
+        );
+        let _id = insertion.unwrap().inserted_id.as_object_id().unwrap();
+        println!("{:?}", _id);
+        Ok(_id)
     }
+
+    
     // Finding a movie with a given movie name.
     pub fn find_doc(&self, movie_name: String) -> Result<Option<Document>, Error> {
         self.collection.find_one(
             bson::doc! {
-                "title":{"$regex":movie_name, "$optons":"i"}
+                "title":{"$regex":movie_name, "$options":"i"}
             },
             None,
         )
@@ -57,7 +60,7 @@ impl UserService {
     pub fn find_doc_by_id(&self, id: ObjectId) -> Result<Option<Document>, Error> {
         self.collection.find_one(
             bson::doc! {
-                "_id": id
+                "_id": id,
             },
             None,
         )
