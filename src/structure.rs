@@ -21,9 +21,9 @@ pub struct Movie {
     pub Awards: Option<String>,
     pub Poster: Option<String>,
     pub Metascore: Option<String>,
-    pub ImdbRating: Option<String>,
-    pub ImdbVotes: Option<String>,
-    pub ImdbID: Option<String>,
+    pub imdbRating: Option<String>,
+    pub imdbVotes: Option<String>,
+    pub imdbID: Option<String>,
     pub Type: Option<String>,
     pub Response: Option<String>,
 }

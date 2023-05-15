@@ -33,9 +33,9 @@ impl UserService {
                     "awards" : movie_name.Awards.as_ref(),
                     "poster" : movie_name.Poster.as_ref(),
                     "metascore" : movie_name.Metascore.as_ref(),
-                    "imdbRating" : movie_name.ImdbRating.as_ref(),
-                    "imdbVotes" : movie_name.ImdbVotes.as_ref(),
-                    "imdbID" : movie_name.ImdbID.as_ref(),
+                    "imdbRating" : movie_name.imdbRating.as_ref(),
+                    "imdbVotes" : movie_name.imdbVotes.as_ref(),
+                    "imdbID" : movie_name.imdbID.as_ref(),
                     "type" : movie_name.Type.as_ref(),
                     "response" : movie_name.Response.as_ref()
             },
