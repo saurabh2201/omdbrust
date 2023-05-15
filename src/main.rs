@@ -1,5 +1,6 @@
 use actix_web::{web, App, HttpServer, web::Data};
 use std::env;
+use dotenv::dotenv;
 mod controller;
 mod service;
 mod structure;
@@ -23,6 +24,7 @@ pub struct AppState {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    dotenv().ok();
     let mongo_url = env::var("MONGO_URI").expect("Mongo URL not connected");
     let client = mongodb::sync::Client::with_uri_str(mongo_url).unwrap();
     let db = client.database("MovieData");
