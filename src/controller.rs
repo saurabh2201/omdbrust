@@ -88,7 +88,7 @@ pub async fn find_movie(
     //let name = movie_name.clone().name.to_string();
     if movie_name.name.to_string().trim().is_empty() {
         let response = Some(bson::doc! {"message": "Invalid Input"});
-        HttpResponse::NotFound().status(StatusCode::NOT_FOUND).json(response.unwrap())
+        HttpResponse::BadRequest().status(StatusCode::BAD_REQUEST).json(response.unwrap())
     } else {
         let found_data = find(app_data.clone(), movie_name).await.unwrap();
         match found_data {
@@ -100,7 +100,7 @@ pub async fn find_movie(
                     let final_response = Some(bson::doc ! {"message":"No movie found"});
                     HttpResponse::NotFound().status(StatusCode::NOT_FOUND).json(final_response)
                 } else {
-                    let inserted_id = insert(app_data.clone(), movie_name).await.unwrap();
+                    let inserted_id = insert(app_data.clone(), someform).await.unwrap();
                     let doc_by_id = find_by_id(app_data.clone(), movie_name).await.unwrap();
                     HttpResponse::Ok().status(StatusCode::OK).json(doc_by_id.unwrap())
                 }
