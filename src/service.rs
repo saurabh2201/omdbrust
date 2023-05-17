@@ -16,7 +16,7 @@ impl UserService {
     }
     /// Inserting a document of movie in MongoDB and returning the
     /// result of InsertOneResult which contains inserted id of the document.
-    pub fn insert_doc(&self, movie_name: &Movie) -> Result<ObjectId, Error> {
+    pub fn insert_doc(&self,movie_name: &Movie) -> Result<ObjectId, Error> {
         let insertion = self.collection.insert_one(
             bson::doc! {
                     "title" : movie_name.Title.as_ref(),
