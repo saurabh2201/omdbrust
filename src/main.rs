@@ -37,7 +37,6 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .app_data(Data::new(app).clone())
             .route("/getmovies", web::get().to(controller::find))
-            //.route("/insertmovies", web::get().to(controller::find_by_id))
     })
     .bind("127.0.0.1:3030")?
     .run()
