@@ -42,7 +42,6 @@ impl UserService {
             None,
         );
         let _id = insertion.unwrap().inserted_id.as_object_id().unwrap();
-        println!("{:?}", _id);
         Ok(_id)
     }
 
